@@ -1,0 +1,28 @@
+'/* Locked
+'セルのロックと解除を行う
+'
+'書式
+'Object.Locked = Expression
+'
+'Object：対象セルのオブジェクト（Rangeオブジェクト、Cellsオブジェクト）
+'Expression：
+'   True ：対象セルをロックする
+'   False：対象セルをロック解除する
+'*/
+
+'//Sample
+Public Sub sample()
+    'アクティブシートの保護解除→全セルのロックを解除
+    ActiveSheet.Unprotect
+    ActiveSheet.Cells.Locked = False
+     
+    'アクティブシートのA1セルをロックする
+    ActiveSheet.Range("A1").Locked = True
+         
+    'アクティブシートを保護する
+    ActiveSheet.Protect
+End Sub
+
+'//注意
+'/* シート自体に保護が掛かっている場合エラーになる。
+'   上記Sampleではシートの保護を外してロックをかけている。

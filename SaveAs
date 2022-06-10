@@ -1,7 +1,43 @@
-'SaveAs
+'/* SaveAs
 'ファイルを保存するためのメソッド
 '
 '書式
 'オブジェクト.SaveAs  ファイル名を含めたファイルパス
+'
+'第一引数：ファイル名を含めたファイルパス
+'
+'戻り値
+'戻り値内容
+'*/
 
-https://www.sejuku.net/blog/67491
+'//Sample
+ThisWorkbook.SaveAs ~/test.xlsx
+
+'//オプション
+'◆使用方法
+'オプション名:=値
+'
+'◆種類
+'Filename	
+'    ファイルパスを含めたファイル名	
+'        文字列でパス指定
+'FileFormat	
+'    ファイルを保存するフォーマットを指定	
+'        .csv  ：xlCSV
+'        .txt  ：xlText
+'        .xlsx ：xlOpenXMLWorkbook
+'        .xlsm ：xlOpenXMLWorkbookMacroEnabled
+'Password	
+'    ファイルを保護するパスワードを指定 (15文字以内)	
+'        文字列でパスワードを指定
+'CreateBackup	
+'    バックアップ ファイルを作成有無	
+'        True/Falseを指定 (Trueで作成)
+
+'//Sample
+hisWorkbook.SaveAs Filename:="C:UsersSiroDesktopBook2.xlsm", FileFormat:=
+
+'//上書き保存時の警告を無視する方法
+Application.DisplayAlerts = false 'メッセージ非表示
+ThisWorkbook.SaveAs ファイルパス
+Application.DisplayAlerts = true 'メッセージ非表示解除
