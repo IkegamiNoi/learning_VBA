@@ -14,7 +14,29 @@
 'J
 'K
 'L
+
+'/* Locked
+'セルのロックと解除を行う
+'
+'書式
+'Object.Locked = Expression
+'
+'Object：対象セルのオブジェクト（Rangeオブジェクト、Cellsオブジェクト）
+'Expression：
+'   True ：対象セルをロックする
+'   False：対象セルをロック解除する
+'*/
+
 'M
+
+'/* MsgBox
+'指定したメッセージをポップアップさせる
+'
+'書式
+'MsgBox "メッセージ内容"
+'
+'*/
+
 'N
 'O
 'P

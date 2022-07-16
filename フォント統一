@@ -1,0 +1,176 @@
+'/*フォントの統一
+'Excelのバージョン変更に伴う標準フォントの変化がある。
+'これによりフォーマットが崩れるため防ぐ方法を用意する。
+'
+'//参照サイト
+'https://www.excel-chunchun.com/entry/FontChange3
+'https://github.com/KotorinChunChun/ExcelFontChangeScript
+'*/
+
+'//全てのフォントの変更
+Sub 全てのセルのフォントを変更()
+    Dim ws As Worksheet
+    For Each ws In ActiveWorkbook.Worksheets
+        ws.Cells.Font.Name = "ＭＳ Ｐゴシック"
+    Next
+End Sub
+
+'//行の高さを固定
+Sub 行の高さを固定に変更()
+    With ActiveSheet
+        Dim rng As Range
+        For Each rng In .Range(.Cells(1, 1), .UsedRange).EntireRow
+            rng.RowHeight = rng.RowHeight
+        Next
+    End With
+End Sub
+
+'//行の高さを自動変更
+Sub 行の高さを自動に変更()
+    With ActiveSheet
+        Dim rng As Range
+        For Each rng In .Range(.Cells(1, 1), .UsedRange).EntireRow
+            rng.AutoFit
+        Next
+    End With
+End Sub
+
+'//スタイル定義を変更
+'/*
+'セルの切り取りをしたときや「書式のクリア」をしたときにフォントが変わるのを防ぐ
+'*/
+'//(1)MSPフォントを使うとき
+Sub セルのスタイルの游フォントをMSPフォントに変更()
+    Dim st As Style
+    For Each st In ActiveWorkbook.Styles
+        With st.font
+            Select Case .Name
+                Case "游ゴシック": .Name = "ＭＳ Ｐゴシック"
+                Case "游明朝": .Name = "ＭＳ Ｐ明朝"
+            End Select
+        End With
+    Next
+End Sub
+
+'//(2)游フォントを使うとき
+Sub セルのスタイルのMSPフォントを游フォントに変更()
+    Dim st As Style
+    For Each st In ActiveWorkbook.Styles
+        With st.font
+            Select Case .Name
+                Case "ＭＳ Ｐゴシック": .Name = "游ゴシック"
+                Case "ＭＳ Ｐ明朝": .Name = "游明朝"
+            End Select
+        End With
+    Next
+End Sub
+
+'//増殖している「標準」スタイルを削除する
+'/*
+'デフォルトとしてある「標準」スタイルは削除されない。
+'デフォルトのスタイルは上記で変更している。
+'*/
+Sub ニセ標準スタイル削除()
+    On Error Resume Next
+        With ActiveWorkbook
+            Dim i As Long
+            For i = .Styles.Count To 1 Step -1
+                If .Styles(i).Name Like "標準*" Then
+                    .Styles(i).Delete
+                End If
+            Next
+        End With
+    On Error GoTo 0
+End Sub
+
+'//記述済みの游フォントをMSPに変更する
+Sub セルの游フォントをMSPフォントに変更_Find()
+    On Error Resume Next
+        FontFind(ActiveSheet.Cells, "游ゴシック").Font.Name = "ＭＳ Ｐゴシック"
+        FontFind(ActiveSheet.Cells, "游明朝").Font.Name = "ＭＳ Ｐ明朝"
+    On Error GoTo 0
+End Sub
+
+'セル範囲のうちあるフォントのセルを全て検索して返す
+Function FontFind(region As Range, findFontName As String) As Range
+    With Application.FindFormat
+        .Clear
+        .Font.Name = findFontName
+    End With
+    
+    Dim rng As Range
+    Dim firstAddress As String
+    With region
+        Set rng = .Find(what:="*", SearchFormat:=True)
+        If Not rng Is Nothing Then
+            firstAddress = rng.Address
+            Dim rngNext As Range: Set rngNext = rng
+            Do
+                '※書式検索ではFindNextは使えない
+                Set rngNext = .Find(what:="*", after:=rngNext, SearchFormat:=True)
+                If rngNext Is Nothing Then Exit Do
+                Set rng = Union(rng, rngNext)
+            Loop Until rngNext.Address = firstAddress
+        End If
+    End With
+    
+    Debug.Print rng.Address
+    Set FontFind = rng
+End Function
+
+'//図の游フォントを変更
+Sub 図の游フォントをMSPフォントに変更_成功()
+    Dim shp As Shape
+    For Each shp In ActiveSheet.Shapes
+        '※TextFrame2はExcel 2007以降
+        If shp.TextFrame2.HasText Then
+            With shp.TextFrame2.TextRange.Font
+                Select Case .Name
+                    Case "游ゴシック": .Name = "ＭＳ Ｐゴシック"
+                    Case "游明朝": .Name = "ＭＳ Ｐ明朝"
+                End Select
+                Select Case .NameFarEast
+                    Case "游ゴシック": .NameFarEast = "ＭＳ Ｐゴシック"
+                    Case "游明朝": .NameFarEast = "ＭＳ Ｐ明朝"
+                End Select
+            End With
+        End If
+    Next
+End Sub
+
+'//ヘッダフッダのフォントを変更
+'/*
+'フォントを手動で設定していなければ下記の記述は意味なし。
+'その場合は「標準」スタイルに依存する。
+'下記の記述はReplaceを使っているため、ヘッダフッタの文字列の中に「游ゴシック」という
+'単語があったら誤認して置換してしまうというバグがある。
+'*/
+Sub ヘッダフッタの游フォントをMSPフォントに変更()
+    Dim ps As PageSetup: Set ps = ActiveSheet.PageSetup
+    With ps
+        'Replaceだと游ゴシックというヘッダフッタ文字列を置換してしまうバグあり
+        If HeaderFooterFont(.LeftHeader) = "游ゴシック" Then
+            .LeftFooter = Replace(.LeftFooter, "游ゴシック", "ＭＳ Ｐゴシック")
+        End If
+        If HeaderFooterFont(.CenterHeader) = "游ゴシック" Then
+            .CenterHeader = Replace(.CenterHeader, "游ゴシック", "ＭＳ Ｐゴシック")
+        End If
+        '以下略
+    End With
+End Sub
+
+'ヘッダ・フッタのフォント文字列を返す
+'文字データのみの時　　：　bbbb
+'フォント設定時　　　　：　&"HGP創英角ﾎﾟｯﾌﾟ体,標準"dddd
+'フォント、サイズ設定時：　&"游ゴシック,標準"&16ああああ
+'太字・斜体・下線設定時：　&"-,太字 斜体"&Uああああ
+'登録して消した通常時　：　&"+,標準"ああああ
+Function HeaderFooterFont(hfValue As String) As String
+    Dim S() As String
+    S = Split(hfValue, """")
+    If UBound(S, 1) > 0 Then
+        HeaderFooterFont = Split(S(1), ",")(0)
+    End If
+End Function
+
+

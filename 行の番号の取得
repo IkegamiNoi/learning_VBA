@@ -1,0 +1,21 @@
+'/* 行番号の取得
+'セルを取得する関数に「.Row」をつけると行番号を返す。
+'
+'書式
+'Range型.Row
+'
+'注意
+'Rowsにするとセルの中身を返す。
+'*/
+
+'//sample
+l = Range("A1").Row ' 1
+l = Range("A3").Row ' 3
+l = ActiveCell.Row
+l = Selection.Row
+
+'//範囲で指定しているときの挙動
+'/*
+'一番上の行を返す。
+'*/
+l = Range("B2:D4").Row        ' 2

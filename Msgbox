@@ -1,0 +1,18 @@
+'/* MsgBox
+'指定したメッセージをポップアップさせる
+'
+'書式
+'MsgBox Prompt ［,Buttons］ ［, Title］
+'
+'引数：文字列
+'*/
+
+'//sample 文字列の表示
+Msgbox "メッセージ内容"
+
+'//sample 変数の中身を表示
+dim a as Long
+a = 8
+Msgbox a '8
+
+'//オプション
