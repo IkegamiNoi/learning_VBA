@@ -7,6 +7,17 @@
 'C
 'D
 'E
+
+'/* End
+'Excelでの「Ctrl + 移動キー」動作を行う。
+'
+'書式
+'Range型.xlUp : ↑上へ
+'Range型.xlDown : ↓下へ
+'Range型.xlToLeft : ←左へ
+'Range型.xlToRight : →右へ
+'*/
+
 'F
 'G
 'H
