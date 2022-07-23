@@ -9,6 +9,7 @@
 '*/
 
 '//sample
+Dim l As Long
 l = Range("A1").Row ' 1
 l = Range("A3").Row ' 3
 l = ActiveCell.Row
@@ -19,3 +20,15 @@ l = Selection.Row
 '一番上の行を返す。
 '*/
 l = Range("B2:D4").Row        ' 2
+
+'//範囲の最終行を取得する。
+Dim c As Range
+Set c = Range("B2:D4")
+l = c.Row + c.Rows.Count - 1 ' 4
+l = c.Rows(c.Rows.Count).Row ' 4
+
+'//最終行を取得
+l = Cells(Rows.Count, 1).End(xlUp).Row
+
+'//最終行の1つ下の行を取得
+l = Cells(Rows.Count, 1).End(xlUp).Row + 1
