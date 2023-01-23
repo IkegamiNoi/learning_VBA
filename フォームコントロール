@@ -1,0 +1,47 @@
+'/* フォームコントロール
+'開発タブより挿入
+'
+'書式
+'Worksheet.コレクション.Add(Left、 Top、 Width、 Height)
+'
+'コレクションに対応するコントロール
+'コントロールの種類	コレクション名
+'ボタン	          Buttons
+'コンボ ボックス    DropDowns
+'チェック ボックス	CheckBoxes
+'スピン ボタン	    Spinners
+'リスト ボックス	ListBoxes
+'オプション ボタン	OptionButtons
+'グループ ぼっくす	GroupBoxes
+'ラベル	           Labels
+'スクロール バー	ScrollBars
+'
+'引数
+'名前	必須 / オプション	データ型	説明
+Left	必須	          Single	文書の左上隅を基準にしてテキストボックスの左上隅の位置をポイント単位で指定します。
+Top	    必須	          Single	文書の上端を基準にしてテキスト ボックスの左上隅の位置をポイント単位で指定します。
+Width	必須	          Single	テキスト ボックスの幅をポイント単位で指定します。
+Height	必須	          Single	テキスト ボックスの高さをポイント単位で指定します。
+'戻り値
+'指定したコントロール
+'*/
+
+'//sample
+Dim sp As Shape
+Set sp = ActiveSheet.Buttons.Add(0, 0, 100, 50)
+
+'/図形オートシェイプと同様にShapesとして扱える。
+
+'/フォームコントロールの削除
+ActiveSheet.Shapes(1).Delete
+ActiveSheet.Shapes("ボタン 1").Delete
+
+'/フォームコントロールの編集
+With ActiveSheet.Shapes(1)
+    .Name = "名前"
+    .Top = 10
+    .Left = 10
+    .Width = 100
+    .Height = 50
+    .OnAction = "マクロ1"
+End With
