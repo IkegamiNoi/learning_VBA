@@ -1,0 +1,62 @@
+## 必要なもの
+psqlODBC
+    https://www.postgresql.org/ftp/odbc/versions/msi/
+Microsoft ActiveX Data X.X Library
+    VBE>ツール>詳細設定
+
+##　接続
+Const dbUserId As String = "postgres"
+Const dbPort As String = "5432"
+Const dbServer As String = "localhost"
+Const dbName As String = "testDB"
+Const dbPassword As String = "password"
+
+Dim cn As Object
+
+Set cn = CreateObject("ADODB.Connection")
+cn.Open "Provider=MSDASQL;Driver=PostgreSQL Unicode;" & _
+                "UID=" & dbUserId & ";" & _
+                "Port=" & dbPort & ";" & _
+                "Server=" & dbServer & ";" & _
+                "Database=" & dbName & ";" & _
+                "PWD=" & dbPassword
+
+'Insert/Selectなどの処理
+
+dbConnect.Close
+
+## Select '上記の接続のOpen~Closeの間で処理を行う
+Dim rs As Variant
+'SQL作成
+Dim SQL As String: SQL = "SELECT * from testTable"
+
+'SQL実行
+Set rs = New ADODB.Recordset
+rs.Open SQL, cn, adOpenKeyset, adLockOptimistic, adCmdText
+
+'ワークシートへの出力
+'ワークシートの選択
+Dim sheet As Worksheet
+Set sheet = Worksheets('testSheet')
+'ワークシートの初期化
+sheet.Cells.Clear
+'データベースのカラムとテーブルを取得
+dbRecordset.MoveFirst
+i = 1
+Do Until dbRecordset.EOF
+    For j = 0 To dbRecordset.Fields.Count - 1
+        'カラムを取得
+        If i = 1 Then
+            sheet.Cells(i, j + 1) = dbRecordset(j).Name
+        End If
+        'テーブルを取得
+        sheet.Cells(i + 1, j + 1) = dbRecordset(j).Value
+    Next j
+    i = i + 1
+    dbRecordset.MoveNext
+Loop
+
+' レコードセットを閉じる
+dbRecordset.Close
+
+## Insert

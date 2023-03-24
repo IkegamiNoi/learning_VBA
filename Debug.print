@@ -1,0 +1,9 @@
+イミディエイトウィンドウに変数やプロパティなどの値を出力する
+
+Debug.Print 出力する式
+
+例
+Debug.Print 123
+Debug.Print "Hello World"
+Debug.Print #3/30/2017#
+Debug.Print ThisWorkbook.Name
